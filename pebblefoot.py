@@ -1,103 +1,66 @@
+from pebble_utils import transfer_to_yt
+from pebble_utils import fetch_tracklist, query_yt, cleanup_string, run_command, process_files
 from spotapi import Song, PublicPlaylist
 from ytmusicapi import YTMusic
 from mutagen.easyid3 import EasyID3 
+import argparse
 import subprocess
+import time
 import sys
-import os 
-
-id='https://open.spotify.com/playlist/1fytm1VDA2xutq7FEn6lSm'
-
-PP=1
-DEBUG=0
+import argparse
+from tabulate import tabulate
 
 yt = YTMusic('browser.json')
 
-# spotify URL to list of strings in format 'title track - artist'
-def fetch_tracklist(url):
-    tracklist=[]
-    playlist= PublicPlaylist(url)
+def parse_args():
+    parser = argparse.ArgumentParser(description="Pebblefoot")
+    parser.add_argument("-u", "--url", required=True, help="spotify playlist URL (format open.spotify.com/playlist/..)")
+    parser.add_argument("-n", "--name", help="output playlist name.")
+    parser.add_argument("-m", "--mode",choices=["d", "t"],help="mode:\n  d = download\n  t = transfer")
+    
+    return parser.parse_args()
 
-    if "open.spotify.com/playlist" in url:
-        print(f"Spotify URL detected.")
-        info = playlist.get_playlist_info()
-        items = info["data"]["playlistV2"]["content"]["items"]
-        print(f"\nGenerating tracklist...\n")
-        for item in items:
-            query = (f"{item["itemV2"]["data"]["name"]} - {item["itemV2"]["data"]["artists"]["items"][0]["profile"]["name"]}")
-            print(f"{query}")
-            tracklist.append(query)
+def search_for_song(string):
+    res = yt.search(string, limit=20, filter="songs")
+    songs =[]
+    split_songs=[]
+    for r in res:
+        songs.append(f"{r["title"]} - {r["artists"][0]["name"]}")
+    split_songs = [s.rsplit(" - ", 1) for s in songs]
+    print(tabulate(split_songs, headers=["Title", "Artist"]))
+    
+def main():
+    args = parse_args()
+
+    url = args.url
+    name = cleanup_string(args.name)
+    mode = args.mode
+
+    tracklist = fetch_tracklist(url)
+    urllist = query_yt(tracklist)
+    
+    if mode=="d":
+        if not (len(tracklist) == len(urllist)):
+            print("Mismatched sizes, quitting!")
+            exit(1)
+        print("Downloading...")
+        for i in range(len(tracklist)):
+            print(f"[{i+1:02d}] {tracklist[i]}")
+            # run_command(urllist[i], f"{name}/{tracklist[i]}")
+            process_files(name)
     else:
-       print("Wrong URL format - try again")
-    return tracklist
-
-def query_yt(tracklist, folder):
-    if DEBUG:
-        print(f"Searching for tracks...")
-    for track in tracklist:
-        res = yt.search(track)[0]
-        video_id = res["videoId"]
-        str_help = f"{res["title"]} - {res["artists"][0]["name"]}"
-        output_name=f"{folder}/{str_help}"
-        run_command(f"https://www.youtube.com/watch?v={video_id}", output_name)
-        if DEBUG:
-            print(f"\n\t{track}\n\t{str_help}\n")
-    print("Tracks found.")
-    if DEBUG:
-        print(tracklist)
-
-def run_command(url, out_name):
-    if DEBUG:
-        print(f"DEBUG: got to run command with {url}")
-    cmd = [
-        "yt-dlp",
-        "--quiet", "--no-warnings",
-        "-x",
-        "--extract-audio",
-        "--audio-format", "mp3",
-        "--embed-thumbnail",
-        "-o", out_name,
-        url,
-    ]
-    try:
-        # print(cmd)
-        subprocess.run(cmd, check=True)
-    except subprocess.CalledProcessError:
-        print(f"[X] yt-dlp failed for {url} / {out_name}")
-        #sys.exit(1)
-
-def process_files(filepath):
-    if not os.path.isdir(filepath):
-        print("Not a directory. Exiting.")
-        exit(1)
-    for p in os.listdir(filepath):
-        fil = f"{filepath}{p}"
-        ddd = p.replace(".mp3", "").split(' - ', 1)
-        print(ddd)
-        tag_mp3(fil, ddd[0], ddd[1])
-
-def tag_mp3(path, title, artist, album=None):
-    print(f"{title} {artist}")
-    audio = EasyID3(path)
-    audio["title"] = title
-    audio["artist"] = artist
-    if album:
-        audio["album"] = album
-    audio.save()
-
-    # tag_mp3(
-    #     path="todolist/01 - Cycles.mp3",
-    #     title="Cycles",
-    #     artist="Lili Trifilio",
-    # )
-
+        transfer_to_yt(urllist, name)
+            
 if __name__=="__main__":
-    print("Pebblefoot : Fuck Spotify\n")
-    if not len(sys.argv)==3:
-        print(f"Usage: python pebblefoot.py [url] [playlist_name]")
-        exit(1)
-    url = sys.argv[1]
-    folder=sys.argv[2]
-    # trackl= fetch_tracklist(url)
-    # query_yt(trackl, folder)
-    process_files(f"{folder}/")
+    print(
+        """
+   ▄▄▄▄  ▗▞▀▚▖▗▖   ▗▖   █ ▗▞▀▚▖▗▞▀▀▘▄▄▄   ▄▄▄     ■  
+   █   █ ▐▛▀▀▘▐▌   ▐▌   █ ▐▛▀▀▘▐▌  █   █ █   █ ▗▄▟▙▄▖
+   █▄▄▄▀ ▝▚▄▄▖▐▛▀▚▖▐▛▀▚▖█ ▝▚▄▄▖▐▛▀▘▀▄▄▄▀ ▀▄▄▄▀   ▐▌  
+   █          ▐▙▄▞▘▐▙▄▞▘█      ▐▌                ▐▌  
+   ▀                                             ▐▌  
+                                                     
+    """                                                                   
+    )
+    main()
 
