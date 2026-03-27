@@ -46,7 +46,7 @@ def main():
         print("Downloading...")
         for i in range(len(tracklist)):
             print(f"[{i+1:02d}] {tracklist[i]}")
-            # run_command(urllist[i], f"{name}/{tracklist[i]}")
+            run_command(urllist[i], f"{name}/{tracklist[i]}")
             process_files(name)
     else:
         transfer_to_yt(urllist, name)
