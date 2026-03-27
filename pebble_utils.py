@@ -87,8 +87,11 @@ def run_command(url, out_name):
 
 def process_files(filepath):
     if not os.path.isdir(filepath):
-        print("Not a directory. Exiting.")
-        exit(1)
+        print("Creating directory")
+        try:
+            cmd = [f"mkdir {filepath}"]
+        except Exception as e:
+            print(e)
     for p in os.listdir(filepath):
         fil = f"{filepath}/{p}"
         ddd = p.replace(".mp3", "").split(' - ', 1)
