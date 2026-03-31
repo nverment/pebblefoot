@@ -1,4 +1,4 @@
-from spotapi import Song, PublicPlaylist
+from spotapi import PublicPlaylist
 from ytmusicapi import YTMusic
 from mutagen.easyid3 import EasyID3 
 import subprocess
@@ -26,19 +26,52 @@ def fetch_tracklist(url):
 
     if "open.spotify.com/playlist" in url:
         print(f"Spotify URL detected.")
-        info = playlist.get_playlist_info()
+        info = playlist.get_playlist_info(343)
         items = info["data"]["playlistV2"]["content"]["items"]
+        playlist_size = len(items)
+
+        # the maximum .get_playlist_info() can handle at once is 343 songs
+        if playlist_size >= 343:
+           tracklist = handle_big_playlist(playlist)
+           return tracklist
+
         print(f"\nTracklist Generated\n-------------------")
+        i = 0
         for item in items:
-            # cleaning up original title (from spotify)
-            title = cleanup_string(item["itemV2"]["data"]["name"])
-            artist = cleanup_string(item["itemV2"]["data"]["artists"]["items"][0]["profile"]["name"])
-            query = (f"{title} - {artist}")
-            print(f"- {query}")
+            query = create_query(item)
+            print(f"[{i+1:02d}] {query}")
+            i += 1
             tracklist.append(query)
     else:
-       print("Wrong URL format - try again")
+       sys.exit("Wrong URL format, try again.")
     return tracklist
+
+def handle_big_playlist(playlist: str) -> list:
+    tracklist=[]
+    # paginate_playlist yields a generator so we turn it into a list for ease
+    info = list(playlist.paginate_playlist())
+    pages = []
+    for page in info:
+        pages.append(page["items"])
+
+    print(f"\nTracklist Generated\n-------------------")
+    i = 0
+    for page in pages:
+        for song in page:
+            query = create_query(song)
+            print(f"[{i+1:02d}] {query}")
+            i += 1
+            tracklist.append(query)
+
+    return tracklist
+
+def create_query(song: dict) -> str:
+    title = cleanup_string(song["itemV2"]["data"]["name"])
+    artist = cleanup_string(song["itemV2"]["data"]["artists"]["items"][0]["profile"]["name"])
+    query = (f"{title} - {artist}")
+
+    return query
+
 
 def transfer_to_yt(url_list, folder):
     existing=input("NOTE: If the playlist already exists and you want to append songs to it, input its URL here. Else, press any key.\n")
@@ -106,4 +139,3 @@ if __name__=="__main__":
         exit(1)
     url = sys.argv[1]
     folder=sys.argv[2]
-    handle_flow(url, folder)

@@ -1,12 +1,7 @@
 from pebble_utils import transfer_to_yt
 from pebble_utils import fetch_tracklist, query_yt, cleanup_string, run_command, process_files
-from spotapi import Song, PublicPlaylist
 from ytmusicapi import YTMusic
-from mutagen.easyid3 import EasyID3 
 import argparse
-import subprocess
-import time
-import sys
 import argparse
 from tabulate import tabulate
 
