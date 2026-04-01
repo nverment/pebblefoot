@@ -1,9 +1,13 @@
 from pebble_utils import transfer_to_yt
 from pebble_utils import fetch_tracklist, query_yt, cleanup_string, run_command, process_files
 from ytmusicapi import YTMusic
+from ytmusicapi.auth.browser import setup_browser
 import argparse
 import argparse
 from tabulate import tabulate
+
+with open('headers.txt', 'r') as f:
+    setup_browser('browser.json', f.read())
 
 yt = YTMusic('browser.json')
 
