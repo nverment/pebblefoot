@@ -1,5 +1,6 @@
 from spotapi import PublicPlaylist
 from ytmusicapi import YTMusic
+from ytmusicapi.auth.browser import setup_browser
 from mutagen.easyid3 import EasyID3 
 import subprocess
 import time
@@ -11,6 +12,8 @@ id='https://open.spotify.com/playlist/1fytm1VDA2xutq7FEn6lSm'
 PP=1
 DEBUG=0
 
+with open('headers.txt', 'r') as f:
+    setup_browser('browser.json', f.read())
 yt = YTMusic('browser.json')
 
 def cleanup_string(srg):
