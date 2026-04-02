@@ -5,3 +5,4 @@ pymongo
 redis
 websockets
 tabulate
+yt-dlp
