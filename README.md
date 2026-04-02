@@ -1,6 +1,6 @@
 Pebblefoot is a tool to help you leave Spotify. It can transfer your existing playlists to YouTube Music or download them locally and automatically rename and tag them so they look nice and clean in your Mp3 player :).
 
-![Screenshot](img/img12.png)
+![Screenshot](img/pebblefoot.png)
 
 (I made this tool for my girlfriend now that we don't live in the same city and I can't download music for her to put on her MP3 player. And she doesn't know shit about computers. Hence the big tutorial. <33)
 
