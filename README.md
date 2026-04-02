@@ -1,35 +1,42 @@
-Pebblefoot is a tool to help you leave Spotify. It can transfer your existing playlists to YouTube Music or download them locally and automatically rename and tag them so they look nice and clean in your Mp3 player :).  
+Pebblefoot is a tool to help you leave Spotify. It can transfer your existing playlists to YouTube Music or download them locally and automatically rename and tag them so they look nice and clean in your Mp3 player :).
 
-
-▄▄▄▄  ▗▞▀▚▖▗▖   ▗▖   █ ▗▞▀▚▖▗▞▀▀▘▄▄▄   ▄▄▄     ■  
-█   █ ▐▛▀▀▘▐▌   ▐▌   █ ▐▛▀▀▘▐▌  █   █ █   █ ▗▄▟▙▄▖
-█▄▄▄▀ ▝▚▄▄▖▐▛▀▚▖▐▛▀▚▖█ ▝▚▄▄▖▐▛▀▘▀▄▄▄▀ ▀▄▄▄▀   ▐▌  
-█          ▐▙▄▞▘▐▙▄▞▘█      ▐▌                ▐▌  
-▀                                             ▐▌  
-                                                  
+▄▄▄▄ ▗▞▀▚▖▗▖ ▗▖ █ ▗▞▀▚▖▗▞▀▀▘▄▄▄ ▄▄▄ ■  
+█ █ ▐▛▀▀▘▐▌ ▐▌ █ ▐▛▀▀▘▐▌ █ █ █ █ ▗▄▟▙▄▖
+█▄▄▄▀ ▝▚▄▄▖▐▛▀▚▖▐▛▀▚▖█ ▝▚▄▄▖▐▛▀▘▀▄▄▄▀ ▀▄▄▄▀ ▐▌  
+█ ▐▙▄▞▘▐▙▄▞▘█ ▐▌ ▐▌  
+▀ ▐▌
 
 (I made this tool for my girlfriend now that we don't live in the same city and I can't download music for her to put on her MP3 player. And she doesn't know shit about computers. Hence the big tutorial. <33)
 
 # Installation
-You need to make sure you have FFMPEG first. If you already have it, continue to the next chapter.
+
+You need to make sure you have FFMPEG installed first. If you already have it installed and have added it to 'Path', continue to the next chapter.
 
 ## FFMPEG
 
 ### For tech people
-Hopefully you already have FFMPEG. If not why
+
+Hopefully you already have FFMPEG installed. If not... why?
 
 ### For noobs
-Go to https://ffmpeg.org/download.html 
+
+Go to https://ffmpeg.org/download.html
 
 ![Screenshot](img/img4.png)
 Click the Windows button and the second options in 'Builds'
 ![Screenshot](img/img5.png)
 
-Download it and extract it somewhere where it won't be deleted (for example, NOT your Downloads folder). Then, go to the extracted folder, click on the subfolder /bin, right click the address and copy the path. 
+Download it and extract it somewhere where it **won't be deleted** (for example, NOT your Downloads folder).
+
+Then, go to the extracted folder, right-click on the subfolder named 'bin' and copy the path (or ctrl+shift+c).
+![Screeshot](img/copy_path.png)
+
+Otherwise you can also click into the 'bin' folder and cope the path from the top bar.
+![Screenshot](img/top_bar.png)
 
 In your computer, open environment variables:
 ![Screenshot](img/img6.png)
-And click on 'Environment Variables' and look for the 'Path' one. Press 'New':
+Click on 'Environment Variables' and look for the 'Path' one. Press 'New':
 ![Screenshot](img/img7.png)
 Then press 'New' again and paste that address in. Press 'Ok' and 'Apply' at the end and close the 'Environment Variables' window.
 ![Screenshot](img/img8.png)
@@ -39,17 +46,21 @@ Should be good :]].
 ## Pebblefoot
 
 ### For tech people
+
 Just clone the directory and run:
+
 ```bash
 pip install -r requirements.txt
 ```
+
 If any module is missing (that happens sometimes), you should be able to manually install it with pip again.
 
 ### For noobs
+
 First, download all the files in here (you can just download as a .zip and extract them).
 ![Screenshot](img/im1.png)
 
-Then put them in a folder - keep in mind that whatever music you download will be saved to a subfolder of the current one. 
+Then put them in a folder - keep in mind that whatever music you download will be saved to a subfolder of the current one.
 
 **For Windows:**
 Go to the folder where your files are, right-click and press 'Open in Terminal'.
@@ -57,10 +68,12 @@ Go to the folder where your files are, right-click and press 'Open in Terminal'.
 
 **For Mac:**
 Open the 'Terminal' app and navigate to your folder (the one where you saved the tool) using the following commands:
+
 - `cd` - go to this folder
 - `ls` - look inside this folder
 
 So, you will do something like:
+
 ```
 >>> ls
 	\music
@@ -78,6 +91,7 @@ pip install -r requirements.txt
 Done!
 
 # Setup
+
 Before running, you need to open YouTube Music and log in. Right click on the page and press Inspect, or just press the F12 key.
 
 ![Screenshot](img/im3.png)
@@ -91,22 +105,19 @@ Click on it, and you should see something like this:
 We want the **Request Headers**. Just click on the 'Raw' toggle and copy everything underneath.
 ![Screenshot](img/image-54.png)
 
-Then, on the terminal run the following command:
+In the folder of the project you will find a text file called 'Headers.txt'.
+![Screenshot](img/headers_pointer.png)
 
-```bash
-ytmusicapi browser
-```
-
-Paste everything, and as instructed, press 'Enter', then 'Ctrl+Z', then 'Enter' again.
-![Screenshot](img/image-55.png)
+Open it, paste the text that you just copied from youtube music and save it.
 
 You are good to go!
 
-**Notes** 
-- This command works differently in different operating systems, so you might need to press some different combination of keys after pasting the headers. In any case, check the instructions displayed after you run the above command.
-- Because these headers reset every now and then, you will also need to do this every now and then. So if you see an error like 'browser.json file does not exist', this is your sign. I usually do it once before each session of using the tool and transfer a lot of playlists without the need to re-do it unless I leave it unattended for an hour or so. 
+**Notes**
+
+- Because these headers reset every now and then, you will also need to do this every now and then. So if you see an error like 'browser.json file does not exist', this is your sign. I usually do it once before each session of using the tool and transfer a lot of playlists without the need to re-do it unless I leave it unattended for an hour or so.
 
 # Usage
+
 Basic command is as follows:
 
 ```bash
@@ -114,10 +125,10 @@ python pebblefoot.py [-h] -u URL [-n NAME] [-m {d,t}]
 ```
 
 Flags are as follows:
+
 - `-h` Show help.
 - `-u` Spotify playlist URL.
 - `-n` Name of output playlist - simply, what the folder you download OR the new YTMusic playlist will be named
 - `-m` Mode. Offers 2 options: [d] for local download and [t] for transfer to YTMusic.
 
 Enjoy!
-
