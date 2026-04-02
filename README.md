@@ -11,14 +11,41 @@ Pebblefoot is a tool to help you leave Spotify. It can transfer your existing pl
 (I made this tool for my girlfriend now that we don't live in the same city and I can't download music for her to put on her MP3 player. And she doesn't know shit about computers. Hence the big tutorial. <33)
 
 # Installation
-## For tech people
+You need to make sure you have FFMPEG first. If you already have it, continue to the next chapter.
+
+## FFMPEG
+
+### For tech people
+Hopefully you already have FFMPEG. If not why
+
+### For noobs
+Go to https://ffmpeg.org/download.html 
+
+![Screenshot](img/img4.png)
+Click the Windows button and the second options in 'Builds'
+![Screenshot](img/img5.png)
+
+Download it and extract it somewhere where it won't be deleted (for example, NOT your Downloads folder). Then, go to the extracted folder, click on the subfolder /bin, right click the address and copy the path. 
+
+In your computer, open environment variables:
+![Screenshot](img/img6.png)
+And click on 'Environment Variables' and look for the 'Path' one. Press 'New':
+![Screenshot](img/img7.png)
+Then press 'New' again and paste that address in. Press 'Ok' and 'Apply' at the end and close the 'Environment Variables' window.
+![Screenshot](img/img8.png)
+
+Should be good :]].
+
+## Pebblefoot
+
+### For tech people
 Just clone the directory and run:
 ```bash
 pip install -r requirements.txt
 ```
 If any module is missing (that happens sometimes), you should be able to manually install it with pip again.
 
-## For noobs
+### For noobs
 First, download all the files in here (you can just download as a .zip and extract them).
 ![Screenshot](img/im1.png)
 
@@ -79,34 +106,11 @@ You are good to go!
 - This command works differently in different operating systems, so you might need to press some different combination of keys after pasting the headers. In any case, check the instructions displayed after you run the above command.
 - Because these headers reset every now and then, you will also need to do this every now and then. So if you see an error like 'browser.json file does not exist', this is your sign. I usually do it once before each session of using the tool and transfer a lot of playlists without the need to re-do it unless I leave it unattended for an hour or so. 
 
-# Installing FFMPEG 
-
-## For tech people
-Hopefully you already have FFMPEG. If not why
-
-## For noobs
-Go to https://ffmpeg.org/download.html 
-
-![Screenshot](img/img4.png)
-Click the Windows button and the second options in 'Builds'
-![Screenshot](img/img5.png)
-
-Download it and extract it somewhere where it won't be deleted (for example, NOT your Downloads folder). Then, go to the extracted folder, click on the subfolder /bin, right click the address and copy the path. 
-
-In your computer, open environment variables:
-![Screenshot](img/img6.png)
-And click on 'Environment Variables' and look for the 'Path' one. Press 'New':
-![Screenshot](img/img7.png)
-Then press 'New' again and paste that address in. Press 'Ok' and 'Apply' at the end and close the 'Environment Variables' window.
-![Screenshot](img/img8.png)
-
-Should be good :]].
-
 # Usage
 Basic command is as follows:
 
 ```bash
-python footpebble.py [-h] -u URL [-n NAME] [-m {d,t}]
+python pebblefoot.py [-h] -u URL [-n NAME] [-m {d,t}]
 ```
 
 Flags are as follows:
