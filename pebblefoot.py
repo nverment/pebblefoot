@@ -18,15 +18,6 @@ def parse_args():
     parser.add_argument("-m", "--mode",choices=["d", "t"],help="mode:\n  d = download\n  t = transfer")
     
     return parser.parse_args()
-
-def search_for_song(string):
-    res = yt.search(string, limit=20, filter="songs")
-    songs =[]
-    split_songs=[]
-    for r in res:
-        songs.append(f"{r["title"]} - {r["artists"][0]["name"]}")
-    split_songs = [s.rsplit(" - ", 1) for s in songs]
-    print(tabulate(split_songs, headers=["Title", "Artist"]))
     
 def main():
     args = parse_args()

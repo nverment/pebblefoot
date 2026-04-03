@@ -84,13 +84,13 @@ def transfer_to_yt(url_list, folder):
         print(playlist_id)
     else:
         playlist_id = yt.create_playlist(title=folder, description='', privacy_status='public')
-
-    for u in url_list[0]:
-        if DEBUG:
-            video_id = u[0].split("v=")[1]
+    
+    for url in url_list:
+        video_id = url.split("v=")[1]
         yt.add_playlist_items(playlist_id, [video_id])
         time.sleep(1)
-        print(f"Added song: {u[1].split("/",1)[1]}")
+
+        print(f"added '{yt.get_song(video_id)["videoDetails"]["title"]}' to playlist")
 
 def query_yt(tracklist):
     url_list=[]
@@ -136,7 +136,7 @@ def tag_mp3(path, title, artist, album=None):
     audio.save()
 
 if __name__=="__main__":
-    print("========== Pebblefoot ==========\nA tool to download or transfer your Spotify playlists. Fuck Spotify, long live piracy.\n\nNOTICE: For now at least, Pebblefoot can only download playlists with up to 25 songs, because Spotify doesn't allow non-premium having peasants to have nice things. Split your playlist into smaller if needed.")
+    print("========== Pebblefoot ==========\nA tool to download or transfer your Spotify playlists. Fuck Spotify, long live piracy.\n")
     if not len(sys.argv)==3:
         print(f"Usage: python pebblefoot.py [url] [playlist_name]")
         exit(1)
