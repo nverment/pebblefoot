@@ -49,6 +49,25 @@ def main():
             process_files(name)
     else:
         transfer_to_yt(urllist, name)
+
+def main_gui(url, name, mode):
+    
+    name = cleanup_string(name)
+    
+    tracklist = fetch_tracklist(url)
+    urllist = query_yt(tracklist)
+    
+    if mode=="d":
+        if not (len(tracklist) == len(urllist)):
+            print("Mismatched sizes, quitting!")
+            exit(1)
+        print("Downloading...")
+        for i in range(len(tracklist)):
+            print(f"[{i+1:02d}] {tracklist[i]}")
+            run_command(urllist[i], f"{name}/{tracklist[i]}")
+            process_files(name)
+    else:
+        transfer_to_yt(urllist, name)
             
 if __name__=="__main__":
     print(
