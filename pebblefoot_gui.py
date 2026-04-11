@@ -71,9 +71,11 @@ class MainWindow(QMainWindow):
         main_layout = QVBoxLayout()
 
         # --- Spotify URL section ---
+        self.folder_name_input = QLineEdit()
         form_layout = QFormLayout()
         self.url_input = QLineEdit()
         form_layout.addRow("Spotify Playlist URL:", self.url_input)
+        form_layout.addRow("Output Playlist Name:", self.folder_name_input)
 
         # --- Mode section ---
         mode_layout = QHBoxLayout()
@@ -94,8 +96,7 @@ class MainWindow(QMainWindow):
         self.browse_directory = QHBoxLayout()
         self.browse_btn = QPushButton("Browse")
         self.folder_lbl2 = QLabel("")
-        self.folder_name = QLabel("Enter a name for the output playlist:")
-        self.folder_name_input = QLineEdit()
+        
 
         self.browse_btn.clicked.connect(self.open_folder)
 
@@ -104,8 +105,7 @@ class MainWindow(QMainWindow):
 
         self.browse_layout.addWidget(self.browse_lbl1)
         self.browse_layout.addLayout(self.browse_directory)
-        self.browse_layout.addWidget(self.folder_name)
-        self.browse_layout.addWidget(self.folder_name_input)
+        
         self.browse_container = QWidget()
         self.browse_container.setLayout(self.browse_layout)
         self.browse_container.hide()
