@@ -6,3 +6,4 @@ redis
 websockets
 tabulate
 yt-dlp
+pyside6
