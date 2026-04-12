@@ -1,15 +1,5 @@
-from pebble_utils import transfer_to_yt
-from pebble_utils import fetch_tracklist, query_yt, cleanup_string, run_command, process_files
-from ytmusicapi import YTMusic
-from ytmusicapi.auth.browser import setup_browser
+from pebble_utils import (transfer_to_yt, fetch_tracklist, query_yt, cleanup_string, run_command, process_files, check_headers_file_exists)
 import argparse
-import argparse
-from tabulate import tabulate
-
-with open('headers.txt', 'r') as f:
-    setup_browser('browser.json', f.read())
-
-yt = YTMusic('browser.json')
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Pebblefoot")
@@ -42,9 +32,9 @@ def main():
         transfer_to_yt(urllist, name)
 
 def main_gui(url, name, mode):
-    
+
+    check_headers_file_exists()
     name = cleanup_string(name)
-    
     tracklist = fetch_tracklist(url)
     urllist = query_yt(tracklist)
     
@@ -72,4 +62,3 @@ if __name__=="__main__":
     """                                                                   
     )
     main()
-

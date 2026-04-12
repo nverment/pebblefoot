@@ -7,11 +7,10 @@ from PySide6.QtWidgets import (
     QLineEdit, QPushButton, QRadioButton,
     QFileDialog, QTextEdit, QDialog,
     QVBoxLayout, QHBoxLayout, QFormLayout,
-    QButtonGroup, QMenu
+    QButtonGroup
 )
 from PySide6.QtGui import QAction
 from PySide6.QtCore import Qt
-import pebble_utils
 import pebblefoot
 
 def save_to_file(text: str) -> None:

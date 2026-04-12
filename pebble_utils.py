@@ -12,9 +12,28 @@ id='https://open.spotify.com/playlist/1fytm1VDA2xutq7FEn6lSm'
 PP=1
 DEBUG=0
 
-with open('headers.txt', 'r') as f:
-    setup_browser('browser.json', f.read())
-yt = YTMusic('browser.json')
+def check_headers_file_exists():
+    if not os.path.exists("headers.txt"):
+        open("headers.txt", "x")
+        print("Paste your headers (enter a blank line to finish):")
+        lines = []
+        while True:
+            line = input()
+            if not line:
+                break
+            lines.append(line)
+        text = "\n".join(lines)
+        with open("headers.txt", "a") as f:
+            f.write(text)
+
+def create_yt_instance():
+    with open('headers.txt', 'r') as f:
+        setup_browser('browser.json', f.read())
+    yt = YTMusic('browser.json')
+    return yt
+
+check_headers_file_exists()
+yt = create_yt_instance()
 
 def cleanup_string(srg):
     cleaned = srg.replace(" - ", " ")
@@ -78,7 +97,7 @@ def create_query(song: dict) -> str:
 
 def transfer_to_yt(url_list, folder):
     existing=input("NOTE: If the playlist already exists and you want to append songs to it, input its URL here. Else, press any key.\n")
-    # existing="https://music.youtube.com/playlist?list=PLhBzAgL4DBIXPtuZkaeYJspigs_j_PZ0s"
+    
     if "https://music.youtube.com/playlist?list=" in existing:
         playlist_id = yt.get_playlist(existing.split("=",1)[1])["id"]
         print(playlist_id)
@@ -99,8 +118,6 @@ def query_yt(tracklist):
     for track in tracklist:
         track = cleanup_string(track)
         res = yt.search(track)[0]
-        # str_help if we need to print out the differences and id possible mismatched songs
-        str_help = f"{res["title"]} - {res["artists"][0]["name"]}"
         url_list.append(f"https://www.youtube.com/watch?v={res["videoId"]}") 
     print("\nTracks found.")
     return url_list
