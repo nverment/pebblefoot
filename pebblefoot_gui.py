@@ -1,5 +1,3 @@
-# file: app.py
-
 import sys
 import os
 from PySide6.QtWidgets import (

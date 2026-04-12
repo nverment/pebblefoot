@@ -1,4 +1,13 @@
-from pebble_utils import (transfer_to_yt, fetch_tracklist, query_yt, cleanup_string, run_command, process_files, check_headers_file_exists)
+from pebble_utils import (
+    transfer_to_yt,
+    fetch_tracklist,
+    query_yt,
+    cleanup_string,
+    run_command,
+    process_files,
+    check_headers_file,
+    create_yt_instance,
+)
 import argparse
 
 def parse_args():
@@ -12,12 +21,15 @@ def parse_args():
 def main():
     args = parse_args()
 
+    check_headers_file()
+
     url = args.url
     name = cleanup_string(args.name)
     mode = args.mode
+    yt = create_yt_instance()
 
     tracklist = fetch_tracklist(url)
-    urllist = query_yt(tracklist)
+    urllist = query_yt(yt, tracklist)
     
     if mode=="d":
         if not (len(tracklist) == len(urllist)):
@@ -29,14 +41,14 @@ def main():
             run_command(urllist[i], f"{name}/{tracklist[i]}")
             process_files(name)
     else:
-        transfer_to_yt(urllist, name)
+        transfer_to_yt(yt, urllist, name)
 
 def main_gui(url, name, mode):
 
-    check_headers_file_exists()
+    yt = create_yt_instance()
     name = cleanup_string(name)
     tracklist = fetch_tracklist(url)
-    urllist = query_yt(tracklist)
+    urllist = query_yt(yt, tracklist)
     
     if mode=="d":
         if not (len(tracklist) == len(urllist)):
@@ -48,7 +60,7 @@ def main_gui(url, name, mode):
             run_command(urllist[i], f"{name}/{tracklist[i]}")
             process_files(name)
     else:
-        transfer_to_yt(urllist, name)
+        transfer_to_yt(yt, urllist, name)
             
 if __name__=="__main__":
     print(
@@ -57,8 +69,8 @@ if __name__=="__main__":
    █   █ ▐▛▀▀▘▐▌   ▐▌   █ ▐▛▀▀▘▐▌  █   █ █   █ ▗▄▟▙▄▖
    █▄▄▄▀ ▝▚▄▄▖▐▛▀▚▖▐▛▀▚▖█ ▝▚▄▄▖▐▛▀▘▀▄▄▄▀ ▀▄▄▄▀   ▐▌  
    █          ▐▙▄▞▘▐▙▄▞▘█      ▐▌                ▐▌  
-   ▀                                             ▐▌  
-                                                     
+   ▀                                             ▐▌                                                  
     """                                                                   
     )
+    print("A tool to download or transfer your Spotify playlists. Fuck Spotify, long live piracy.\n")
     main()
