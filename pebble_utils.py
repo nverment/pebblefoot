@@ -1,20 +1,48 @@
-from spotapi import PublicPlaylist
-from ytmusicapi import YTMusic
-from ytmusicapi.auth.browser import setup_browser
-from mutagen.easyid3 import EasyID3 
-import subprocess
-import time
+import os
 import sys
-import os 
+import time
+import subprocess
+from ytmusicapi import YTMusic
+from spotapi import PublicPlaylist
+from mutagen.easyid3 import EasyID3
+from ytmusicapi.auth.browser import setup_browser
 
-id='https://open.spotify.com/playlist/1fytm1VDA2xutq7FEn6lSm'
-
-PP=1
 DEBUG=0
 
-with open('headers.txt', 'r') as f:
-    setup_browser('browser.json', f.read())
-yt = YTMusic('browser.json')
+def handle_multi_line_input() -> str:
+    lines = []
+    while True:
+        line = input()
+        if not line:
+            break
+        lines.append(line)
+    text = "\n".join(lines)
+    return text
+
+
+def check_headers_file():
+    if not os.path.exists("headers.txt"):
+        
+        open("headers.txt", "x") # create headers.txt
+        print("Paste your headers (enter a blank line to finish):")
+
+        headers_text = handle_multi_line_input()
+        if not headers_text:
+            raise Exception("Entered empty string")
+        
+        with open("headers.txt", "a") as f:
+            f.write(headers_text)
+
+    with open('headers.txt', 'r') as f:
+        if f.read() == "":
+            sys.exit("Empty headers.txt file.\nExiting...")
+
+
+def create_yt_instance():
+    with open('headers.txt', 'r') as f:
+        setup_browser('browser.json', f.read())
+    yt = YTMusic('browser.json')
+    return yt
 
 def cleanup_string(srg):
     cleaned = srg.replace(" - ", " ")
@@ -51,8 +79,7 @@ def fetch_tracklist(url):
 
 def handle_big_playlist(playlist: str) -> list:
     tracklist=[]
-    # paginate_playlist yields a generator so we turn it into a list for ease
-    info = list(playlist.paginate_playlist())
+    info = list(playlist.paginate_playlist()) # paginate_playlist yields a generator so we turn it into a list for ease
     pages = []
     for page in info:
         pages.append(page["items"])
@@ -75,32 +102,31 @@ def create_query(song: dict) -> str:
 
     return query
 
-
-def transfer_to_yt(url_list, folder):
-    existing=input("NOTE: If the playlist already exists and you want to append songs to it, input its URL here. Else, press any key.\n")
-    # existing="https://music.youtube.com/playlist?list=PLhBzAgL4DBIXPtuZkaeYJspigs_j_PZ0s"
+def transfer_to_yt(yt_instance, url_list, folder):
+    existing=input("Enter existing playlist URL to add songs to it." \
+    "\nor press ENTER (no URL) and a new playlist will be created in your profile automatically.\n"
+    "URL:")
+    
     if "https://music.youtube.com/playlist?list=" in existing:
-        playlist_id = yt.get_playlist(existing.split("=",1)[1])["id"]
+        playlist_id = yt_instance.get_playlist(existing.split("=",1)[1])["id"]
         print(playlist_id)
     else:
-        playlist_id = yt.create_playlist(title=folder, description='', privacy_status='public')
+        playlist_id = yt_instance.create_playlist(title=folder, description='', privacy_status='public')
     
     for url in url_list:
         video_id = url.split("v=")[1]
-        yt.add_playlist_items(playlist_id, [video_id])
+        yt_instance.add_playlist_items(playlist_id, [video_id])
         time.sleep(1)
 
-        print(f"added '{yt.get_song(video_id)["videoDetails"]["title"]}' to playlist")
+        print(f"added '{yt_instance.get_song(video_id)["videoDetails"]["title"]}' to playlist")
 
-def query_yt(tracklist):
+def query_yt(yt_instance, tracklist):
     url_list=[]
     if DEBUG:
         print(f"Searching for tracks...")
     for track in tracklist:
         track = cleanup_string(track)
-        res = yt.search(track)[0]
-        # str_help if we need to print out the differences and id possible mismatched songs
-        str_help = f"{res["title"]} - {res["artists"][0]["name"]}"
+        res = yt_instance.search(track)[0]
         url_list.append(f"https://www.youtube.com/watch?v={res["videoId"]}") 
     print("\nTracks found.")
     return url_list
@@ -134,11 +160,3 @@ def tag_mp3(path, title, artist, album=None):
     if album:
         audio["album"] = album
     audio.save()
-
-if __name__=="__main__":
-    print("========== Pebblefoot ==========\nA tool to download or transfer your Spotify playlists. Fuck Spotify, long live piracy.\n")
-    if not len(sys.argv)==3:
-        print(f"Usage: python pebblefoot.py [url] [playlist_name]")
-        exit(1)
-    url = sys.argv[1]
-    folder=sys.argv[2]
