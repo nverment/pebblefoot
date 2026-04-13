@@ -149,7 +149,7 @@ Flags are as follows:
 - `-h` Show help.
 - `-u` Spotify playlist URL.
 - `-n` Name of output playlist - simply, what the folder you download OR the new YTMusic playlist will be named
-- `-m` Mode. Offers 2 options: [d] for local download and [t] for transfer to YTMusic.
+- `-m` Mode. Offers 2 options: [d] for download locally and [t] for transfer to YTMusic.
 
 ## GUI
 
@@ -159,7 +159,7 @@ To run the graphic interface version the command is:
 python3 pebblefoot_gui.py
 ```
 
-**NOTE**
+**NOTE**:
 The graphic interface is still **under development** and so it may not work perfectly just yet.
 
 - If you want to transfer your playlist to youtube it is easier to use the CLI _for now_.
