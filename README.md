@@ -77,24 +77,24 @@ If any module is missing (that happens sometimes), you should be able to manuall
 
 2. Extract the contents of the zip file into a folder - keep in mind that whatever music you download will be saved to a subfolder of the one you extracted the zip into.
 
-3. **For Windows:**
-   Go to the folder where your files are, right-click and press 'Open in Terminal'.
-   ![Screenshot](img/im2.png)
+3. - **For Windows:**
+     Go to the folder where your files are, right-click and press 'Open in Terminal'.
+     ![Screenshot](img/im2.png)
 
-   **For Mac:**
-   Open the 'Terminal' app and navigate to your folder (the one where you saved the tool) using the following commands:
-   - `cd` - go to this folder
-   - `ls` - look inside this folder
+   - **For Mac:**
+     Open the 'Terminal' app and navigate to your folder (the one where you saved the tool) using the following commands:
+     - `cd` - go to this folder
+     - `ls` - look inside this folder
 
-   So, you will do something like:
+       So, you will do something like:
 
-   ```
-   >>> ls
-   	\music
-   	\pictures
-   	(^^ this will show you the files and folders in the folder you are currently in)
-   >>> cd \music
-   ```
+       ```
+       >>> ls
+       	\music
+       	\pictures
+       	(^^ this will show you the files and folders in the folder you are currently in)
+       >>> cd \music
+       ```
 
 4. Run this command:
 
@@ -158,5 +158,11 @@ To run the graphic interface version the command is:
 ```bash
 python3 pebblefoot_gui.py
 ```
+
+**NOTE**
+The graphic interface is still **under development** and so it may not work perfectly just yet.
+
+- If you want to transfer your playlist to youtube it is easier to use the CLI _for now_.
+- Also, the gui will appear frozen and a message to terminate it will pop up. Do not terminate it, the program is running just fine in the background. Instead press wait for program to respond if prompted to
 
 Enjoy!
